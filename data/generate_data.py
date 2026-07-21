@@ -20,8 +20,9 @@ for month in months:
         if random.random() > 0.1:
             sales = np.random.randint(1_000_000, 5_000_000)
             refund = int(sales * np.random.uniform(0.01, 0.03))
-            payment = sales - refund if random.random() > 0.15 else int(sales * 0.5)
-            unpaid = sales - payment
+            net = sales - refund
+            payment = net if random.random() > 0.15 else int(net * 0.5)
+            unpaid = net - payment  
             day = np.random.randint(1, 21)
             hour = np.random.randint(9, 18)
             minute = np.random.randint(0, 60)
@@ -35,7 +36,7 @@ for month in months:
 # 2-1. 기말 집중 매출
 for i in range(5):
     sales = np.random.randint(20_000_000, 30_000_000)
-    refund = int(sales * 0.02); payment = int(sales * 0.3); unpaid = sales - payment
+    refund = int(sales * 0.02); payment = int(sales * 0.3); unpaid = sales - refund - payment
     records.append({'년월': '2024-12', '거래처': f'거래처{i+1:03d}', '매출액': sales,
         '환불액': refund, '수금액': payment, '미수금': unpaid,
         '입력일시': f"2024-12-{np.random.randint(20,31):02d} 14:30:00",

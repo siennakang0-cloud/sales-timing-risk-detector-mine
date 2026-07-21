@@ -40,9 +40,24 @@ def validate_missing_values(df):
         print("[OK] 결측치가 없습니다.")
         return True
 
+def validate_balance(df):
+    # 환불 + 수금 + 미수금을 더한 값
+    expected = df['환불액'] + df['수금액'] + df['미수금']
+
+    # 매출액과 다른 행이 있는지 확인 (1원 정도 오차는 허용)
+    mismatches = df[abs(df['매출액'] - expected) > 1]
+
+    if len(mismatches) > 0:
+        print(f"[ERROR] 금액 불일치 {len(mismatches)}건 발견")
+        return False
+    else:
+        print("[OK] 모든 거래의 금액이 일치합니다 (매출액 = 환불액 + 수금액 + 미수금)")
+        return True
+
 
 print(load_sales_data())
 
 df = load_sales_data()
 validate_columns(df)
 validate_missing_values(df)
+validate_balance(df)
