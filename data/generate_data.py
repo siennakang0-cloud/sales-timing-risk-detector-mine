@@ -56,7 +56,7 @@ for i in range(5):
 for i in range(5):
     month = months[i]
     month_total = sum(r['매출액'] for r in records if r['년월'] == month)
-    sales = int(month_total * 0.75)
+    sales = int(month_total * 3)
     refund = int(sales * 0.02); payment = sales - refund
     records.append({'년월': month, '거래처': f'거래처{i+11:03d}', '매출액': sales,
         '환불액': refund, '수금액': payment, '미수금': 0,
