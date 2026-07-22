@@ -76,18 +76,20 @@ def detect_sudden_sales_increase(df):
     return result
 
 
-from loader import load_sales_data
 
-df = load_sales_data()  
+if __name__ == "__main__":
+    from loader import load_sales_data
 
-result = detect_yearend_concentration(df)
-print(f"기말 집중 매출: {len(result)}건")
-print(result[['년월', '거래처', '매출액']])
+    df = load_sales_data()
 
-result = detect_amount_volatility(df)
-print(f"거래액 변동성: {len(result)}건")
-print(result[['년월', '거래처', '매출액']])
+    result = detect_yearend_concentration(df)
+    print(f"기말 집중 매출: {len(result)}건")
+    print(result[['년월', '거래처', '매출액']])
 
-result = detect_sudden_sales_increase(df)
-print(f"매출액 급증: {len(result)}건")
-print(result[['년월', '거래처', '매출액']])
+    result = detect_amount_volatility(df)
+    print(f"거래액 변동성: {len(result)}건")
+    print(result[['년월', '거래처', '매출액']])
+
+    result = detect_sudden_sales_increase(df)
+    print(f"매출액 급증: {len(result)}건")
+    print(result[['년월', '거래처', '매출액']])
