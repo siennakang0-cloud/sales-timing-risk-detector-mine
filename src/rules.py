@@ -39,6 +39,21 @@ def detect_yearend_concentration(df):
     result = result.drop('month_num', axis=1)
     return result
 
+def detect_amount_volatility(df):
+    df_copy = df.copy()
+
+    # 거래처별 매출의 평균과 표준편차 구하기
+    company_stats = df_copy.groupby('거래처')['매출액'].agg(['mean', 'std']).fillna(0)
+    company_stats.columns = ['company_mean', 'company_std']
+
+    # 각 행에 그 거래처의 평균·표준편차를 붙이기
+    df_copy = df_copy.join(company_stats, on='거래처')
+
+    # 표준편차가 평균의 2배를 넘는 행만
+    result = df_copy[df_copy['company_std'] > df_copy['company_mean'] * 2.0].copy()
+    result = result.drop(['company_mean', 'company_std'], axis=1)
+    return result
+
 
 from loader import load_sales_data
 
@@ -46,4 +61,8 @@ df = load_sales_data()
 
 result = detect_yearend_concentration(df)
 print(f"기말 집중 매출: {len(result)}건")
+print(result[['년월', '거래처', '매출액']])
+
+result = detect_amount_volatility(df)
+print(f"거래액 변동성: {len(result)}건")
 print(result[['년월', '거래처', '매출액']])
