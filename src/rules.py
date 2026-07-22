@@ -25,16 +25,25 @@ def detect_payment_delay(df):
     ]
     return result
 
+def detect_yearend_concentration(df):
+    overall_avg = df['매출액'].mean()          # 전체 평균 매출
+
+    df_copy = df.copy()
+    # '년월'에서 '월' 숫자만 뽑기 (예: '2024-12' → 12)
+    df_copy['month_num'] = df_copy['년월'].str.split('-').str[1].astype(int)
+
+    is_period_end = df_copy['month_num'].isin([3, 6, 9, 12])   # 분기말/연말인가
+    is_high_sales = df_copy['매출액'] > overall_avg * 3.0        # 평균의 3배 초과인가
+
+    result = df_copy[is_period_end & is_high_sales].copy()
+    result = result.drop('month_num', axis=1)
+    return result
 
 
 from loader import load_sales_data
 
 df = load_sales_data()  
-result = detect_transaction_concentration(df)
-print(f"거래 집중도 이상: {len(result)}건")
+
+result = detect_yearend_concentration(df)
+print(f"기말 집중 매출: {len(result)}건")
 print(result[['년월', '거래처', '매출액']])
-
-
-result = detect_payment_delay(df)
-print(f"수금 지연 이상: {len(result)}건")
-print(result[['년월', '거래처', '매출액', '미수금']])
