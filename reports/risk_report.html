@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매출 인식 타이밍 위험 분석 리포트</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+       background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:40px 20px; min-height:100vh; }
+.container { max-width:1200px; margin:0 auto; background:#fff; border-radius:12px;
+       box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden; }
+.header { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#fff; padding:40px; text-align:center; }
+.header h1 { font-size:2.3em; margin-bottom:10px; }
+.header p { opacity:0.9; }
+.summary { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; padding:30px; background:#f8f9fa; border-bottom:1px solid #e9ecef; }
+.card { text-align:center; padding:20px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.card .num { font-size:2.2em; font-weight:bold; color:#667eea; margin-bottom:8px; }
+.card .label { font-size:0.9em; color:#6c757d; }
+.content { padding:40px; }
+.section { margin-bottom:45px; }
+.section h2 { font-size:1.6em; color:#333; margin-bottom:18px; padding-bottom:10px; border-bottom:3px solid #667eea; }
+table { width:100%; border-collapse:collapse; margin-top:12px; font-size:0.93em; }
+th { background:#667eea; color:#fff; padding:11px; text-align:left; }
+td { padding:11px; border-bottom:1px solid #e9ecef; }
+tr:hover { background:#f8f9fa; }
+.footer { background:#f8f9fa; padding:25px; text-align:center; color:#6c757d; font-size:0.88em; border-top:1px solid #e9ecef; }
+ul { margin-left:20px; line-height:2; color:#555; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📊 매출 인식 타이밍 위험 분석 리포트</h1>
+    <p>Sales Timing Risk Detector · ISA 540/330 기반 위험 기반 감사</p>
+  </div>
+  <div class="summary">
+    <div class="card"><div class="num">50</div><div class="label">분석 거래처</div></div>
+    <div class="card"><div class="num" style="color:#dc3545;">89</div><div class="label">위험 거래</div></div>
+    <div class="card"><div class="num">8</div><div class="label">최고 위험점수</div></div>
+    <div class="card"><div class="num">16.5%</div><div class="label">위험 거래 비율</div></div>
+  </div>
+  <div class="content">
+    <div class="section">
+      <h2>🎯 탐지 규칙 분포</h2>
+      <table><thead><tr><th>탐지 규칙</th><th style="text-align:right;">적중 횟수</th></tr></thead>
+      <tbody><tr><td>거래액 변동성</td><td style='text-align:right;'>52</td></tr><tr><td>매출액 급증</td><td style='text-align:right;'>38</td></tr><tr><td>기말 집중 매출</td><td style='text-align:right;'>7</td></tr><tr><td>환불률 비정상</td><td style='text-align:right;'>5</td></tr><tr><td>거래 집중도</td><td style='text-align:right;'>5</td></tr><tr><td>수금 지연</td><td style='text-align:right;'>5</td></tr></tbody></table>
+    </div>
+    <div class="section">
+      <h2>⚠️ 위험 거래 목록 (위험도순)</h2>
+      <table><thead><tr><th>년월</th><th>거래처</th><th>위험점수</th><th>규칙수</th><th>매출액</th><th>탐지 사유</th></tr></thead>
+      <tbody>
+        <tr>
+            <td>2024-03</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#dc3545; font-weight:bold;">8</td>
+            <td style="text-align:right;">4</td>
+            <td style="text-align:right;">373,577,660</td>
+            <td>기말 집중 매출, 거래 집중도, 거래액 변동성, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처018</td>
+            <td style="text-align:right; color:#dc3545; font-weight:bold;">6</td>
+            <td style="text-align:right;">3</td>
+            <td style="text-align:right;">30,677,319</td>
+            <td>기말 집중 매출, 수금 지연, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#dc3545; font-weight:bold;">5</td>
+            <td style="text-align:right;">3</td>
+            <td style="text-align:right;">415,509,464</td>
+            <td>거래 집중도, 거래액 변동성, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#dc3545; font-weight:bold;">5</td>
+            <td style="text-align:right;">3</td>
+            <td style="text-align:right;">411,966,529</td>
+            <td>거래 집중도, 거래액 변동성, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#dc3545; font-weight:bold;">5</td>
+            <td style="text-align:right;">3</td>
+            <td style="text-align:right;">470,325,511</td>
+            <td>거래 집중도, 거래액 변동성, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처002</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">28,806,127</td>
+            <td>기말 집중 매출, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-09</td>
+            <td>거래처009</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">7,855,843</td>
+            <td>환불률 비정상, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-01</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">406,413,734</td>
+            <td>거래 집중도, 거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처005</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">31,450,740</td>
+            <td>기말 집중 매출, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처008</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">6,547,896</td>
+            <td>환불률 비정상, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처003</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">25,626,406</td>
+            <td>기말 집중 매출, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처004</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">31,320,397</td>
+            <td>기말 집중 매출, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처001</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">4</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">25,511,512</td>
+            <td>기말 집중 매출, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처020</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">43,850,582</td>
+            <td>수금 지연, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-06</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">4,075,246</td>
+            <td>거래액 변동성, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처010</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">7,346,705</td>
+            <td>환불률 비정상</td>
+        </tr>
+        
+        <tr>
+            <td>2024-08</td>
+            <td>거래처007</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">8,890,143</td>
+            <td>환불률 비정상</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처017</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">48,833,060</td>
+            <td>수금 지연, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처006</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,418,811</td>
+            <td>환불률 비정상</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처019</td>
+            <td style="text-align:right; color:#ff9800; font-weight:bold;">3</td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:right;">39,381,077</td>
+            <td>수금 지연, 매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,179,408</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,945,323</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-01</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,529,907</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-01</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,369,137</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-01</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,245,510</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,571,242</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,730,540</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,847,723</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,844,936</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,015,960</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,532,955</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,785,456</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,780,640</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,718,747</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,597,338</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,740,316</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,173,659</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-01</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,028,114</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-01</td>
+            <td>거래처016</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">49,712,273</td>
+            <td>수금 지연</td>
+        </tr>
+        
+        <tr>
+            <td>2024-06</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,720,098</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,044,503</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-08</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,158,523</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-08</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,768,184</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-09</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,021,332</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-09</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,802,663</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,174,736</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-08</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,685,198</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,091,386</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,038,879</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-09</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,201,989</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,537,405</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,849,781</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-08</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,154,230</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,384,280</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,037,293</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,181,095</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,704,140</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,376,019</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,079,833</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">2,897,869</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-09</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,967,725</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처013</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,432,220</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처015</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,819,922</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처012</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,236,352</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,445,106</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처014</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,527,710</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처011</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">2</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">1,677,234</td>
+            <td>거래액 변동성</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처029</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,297,152</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처044</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,205,765</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-02</td>
+            <td>거래처001</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,500,772</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처022</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">12,365,190</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-03</td>
+            <td>거래처007</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,498,280</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처028</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">10,986,318</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-06</td>
+            <td>거래처025</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">13,852,969</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처018</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,059,005</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처024</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,777,769</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-07</td>
+            <td>거래처046</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,291,950</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-04</td>
+            <td>거래처023</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">13,438,686</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처024</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">15,080,189</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-06</td>
+            <td>거래처010</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,904,792</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-05</td>
+            <td>거래처044</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,915,730</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처044</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,510,910</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-10</td>
+            <td>거래처046</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,912,194</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-09</td>
+            <td>거래처021</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,904,971</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처049</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,409,560</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-11</td>
+            <td>거래처035</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,385,796</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처027</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,170,939</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처047</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">3,560,163</td>
+            <td>매출액 급증</td>
+        </tr>
+        
+        <tr>
+            <td>2024-12</td>
+            <td>거래처048</td>
+            <td style="text-align:right; color:#28a745; font-weight:bold;">1</td>
+            <td style="text-align:right;">1</td>
+            <td style="text-align:right;">4,842,677</td>
+            <td>매출액 급증</td>
+        </tr>
+        </tbody></table>
+    </div>
+    <div class="section">
+      <h2>📋 감사 방법론</h2>
+      <p style="line-height:1.8; color:#555;">본 리포트는 <strong>ISA 540(회계추정)</strong>과 <strong>ISA 330(감사절차)</strong>에 기반한 위험 기반 감사를 자동화한 것입니다. 매출 인식 타이밍의 위험을 6개 지표로 식별합니다:</p>
+      <ul>
+        <li><strong>기말 집중 매출</strong> (가중치 3): 분기말·연말 비정상 매출 급증</li>
+        <li><strong>환불률 비정상</strong> (가중치 3): 매출 대비 환불률 과도</li>
+        <li><strong>거래 집중도</strong> (가중치 2): 월 매출의 50%↑ 단일 거래처 편중</li>
+        <li><strong>수금 지연</strong> (가중치 2): 미수금 장기 미회수</li>
+        <li><strong>거래액 변동성</strong> (가중치 2): 거래처별 매출 편차 극단적</li>
+        <li><strong>매출액 급증</strong> (가중치 1): 전월 대비 300%↑ 증가</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer">
+    <div>한정된 감사 자원을 위험 점수 높은 거래부터 우선 배분합니다. (규칙 기반 1차 스크리닝)</div>
+    <div style="color:#999; margin-top:8px;">리포트 생성: 2026년 07월 22일 11:53:05</div>
+  </div>
+</div>
+</body>
+</html>
