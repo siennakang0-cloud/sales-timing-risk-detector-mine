@@ -55,6 +55,27 @@ def detect_amount_volatility(df):
     return result
 
 
+def detect_sudden_sales_increase(df):
+    df_copy = df.copy()
+
+    # 거래처·년월별 매출 합계 (시간순 정렬)
+    monthly = df_copy.groupby(['거래처', '년월'])['매출액'].sum().reset_index()
+    monthly = monthly.sort_values(['거래처', '년월'])
+
+    # 거래처별로 '전월 매출'을 한 칸 밀어서 가져오기
+    monthly['prev_sales'] = monthly.groupby('거래처')['매출액'].shift(1)
+
+    # 전월 대비 증가율
+    monthly['ratio'] = monthly['매출액'] / monthly['prev_sales']
+
+    # 3배 초과 급증한 (거래처, 년월)만 추리기
+    surged = monthly[monthly['ratio'] > 3.0][['거래처', '년월']]
+
+    # 원본에서 해당 (거래처, 년월) 행만 골라내기
+    result = df_copy.merge(surged, on=['거래처', '년월'], how='inner')
+    return result
+
+
 from loader import load_sales_data
 
 df = load_sales_data()  
@@ -65,4 +86,8 @@ print(result[['년월', '거래처', '매출액']])
 
 result = detect_amount_volatility(df)
 print(f"거래액 변동성: {len(result)}건")
+print(result[['년월', '거래처', '매출액']])
+
+result = detect_sudden_sales_increase(df)
+print(f"매출액 급증: {len(result)}건")
 print(result[['년월', '거래처', '매출액']])
