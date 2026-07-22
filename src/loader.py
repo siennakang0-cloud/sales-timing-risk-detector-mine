@@ -55,9 +55,12 @@ def validate_balance(df):
         return True
 
 
-print(load_sales_data())
 
-df = load_sales_data()
-validate_columns(df)
-validate_missing_values(df)
-validate_balance(df)
+if __name__ == "__main__":
+    # 테스트용으로 직접 실행하면 데이터 로딩과 검증을 해본다
+    print("=== 데이터 로딩 및 검증 ===")
+    df = load_sales_data()
+    validate_columns(df)
+    validate_missing_values(df)
+    validate_balance(df)
+    
