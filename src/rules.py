@@ -16,6 +16,14 @@ def detect_transaction_concentration(df):
     result = df_copy[df_copy['ratio'] > 0.50]   # ④ 50% 넘는 행만
     return result
 
+def detect_payment_delay(df):
+    df_copy = df.copy()
+    df_copy['unpaid_ratio'] = df_copy['미수금'] / df_copy['매출액']   # 미수금 비율
+
+    result = df_copy[
+        (df_copy['unpaid_ratio'] > 0.50) & (df_copy['미수금'] >= 20000000)
+    ]
+    return result
 
 
 
@@ -25,3 +33,8 @@ df = load_sales_data()
 result = detect_transaction_concentration(df)
 print(f"거래 집중도 이상: {len(result)}건")
 print(result[['년월', '거래처', '매출액']])
+
+
+result = detect_payment_delay(df)
+print(f"수금 지연 이상: {len(result)}건")
+print(result[['년월', '거래처', '매출액', '미수금']])
